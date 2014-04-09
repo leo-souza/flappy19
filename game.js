@@ -117,7 +117,6 @@
     for(;i < blocks.length;i++){
       var s = Math.floor(Math.random()*(6-4+1)+4),
           d = Math.floor(Math.random()*(1-0+1)+0);
-console.log(s); console.log(d);
       blocks[i].vX = s * (d == 0 ? 1 : -1);
       blocks[i].vY = s * (d == 0 ? 1 : -1);
     }
