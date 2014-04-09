@@ -5,6 +5,7 @@
   walls = [],
   borders = [],
   blocks = [],
+  gameLoop,
   player, drag, moving, score, startTime,
   topScoreKey = 'topScore',
   playerReady = false,
@@ -81,7 +82,7 @@
     canvas.addEventListener('click', function(e){
       if( isOver(e.offsetX, e.offsetY, score) ){
         resetGame();
-        loop = setInterval(render, 1000/60);
+        startGame();
       }
     });
 
@@ -112,10 +113,14 @@
     return false;
   }
 
+  function startGame(){
+    gameLoop = setInterval(render, 10);
+  }
+
   function startMoving(){
     var i = 0;
     for(;i < blocks.length;i++){
-      var s = Math.floor(Math.random()*(6-4+1)+4),
+      var s = Math.floor(Math.random()*(5-3+1)+3),
           d = Math.floor(Math.random()*(1-0+1)+0);
       blocks[i].vX = s * (d == 0 ? 1 : -1);
       blocks[i].vY = s * (d == 0 ? 1 : -1);
@@ -126,7 +131,7 @@
 
   function stopMoving(){
     moving = false;
-    clearInterval(loop);
+    clearInterval(gameLoop);
     // Score
     drawScore();
   }
@@ -260,7 +265,6 @@
   }
 
   initGame();
-
-  var loop = setInterval(render, 1000/60);
+  startGame();
     
 })()
