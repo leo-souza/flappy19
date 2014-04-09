@@ -1,0 +1,28 @@
+ body{
+  font-family: "Open Sans", "Helvetica Neue", "Helvetica", "Arial";
+  color: #555;
+}
+
+#background{
+  height: 500px;
+  width: 500px;
+  background-image: url('images/back.jpg');
+  margin: 0 auto;
+}
+
+a{ 
+  text-decoration: none;
+  color: gray;
+}
+
+.author{
+  float: right;
+}
+
+.container{
+  width: 800px;
+  background-color: #EEE;
+  margin: 0 auto;
+  padding: 10px;
+  text-align: center;
+}
