@@ -1,5 +1,5 @@
 (function(){
-  
+
   var canvas = document.getElementById('game'),
   ctx = canvas.getContext('2d'),
   walls = [],
@@ -14,7 +14,7 @@
   blockImage = new Image(),
   block2Ready = false,
   block2Image = new Image();
- 
+
   var wallW = 50,
   playerW = 40,
   playerH = 28,
@@ -24,9 +24,9 @@
   function initGame(){
     playerImage.onload = function () {
 	    playerReady = true;
-    };    
+    };
     playerImage.src = "images/bird.png";
-    
+
     canvas.width = gameW;
     canvas.height = gameH;
 
@@ -41,17 +41,17 @@
 
     blockImage.onload = function () {
 	    blockReady = true;
-    };    
+    };
     blockImage.src = "images/pipe1.png";
 
     block2Image.onload = function () {
 	    block2Ready = true;
-    };    
+    };
     block2Image.src = "images/pipe2.png";
-    
+
     //events
     canvas.addEventListener('mousedown', function(e){
-      if( isOver(e.offsetX, e.offsetY, player) ){  
+      if( isOver(e.offsetX, e.offsetY, player) ){
         player.offX = (e.offsetX - player.x);
         player.offY = (e.offsetY - player.y);
         drag = true;
@@ -71,7 +71,7 @@
         player.x = (e.offsetX - player.offX);
         player.y = (e.offsetY - player.offY);
       }
-    
+
       if( isOver(e.offsetX, e.offsetY, player) || isOver(e.offsetX, e.offsetY, score) ){
         canvas.style.cursor = 'pointer';
       }else{
@@ -93,8 +93,8 @@
     player = {x: (gameW/2)-(playerW/2), y: (gameH/2)-(playerH/2), w: playerW, h: playerH};
     score = {x: 0, y: 0, w: 0, h: 0};
     drag = false;
-    moving = false;  
-    
+    moving = false;
+
     blocks = [];
     blocks.push({x: wallW+15, y: wallW+10, w: 60, h: 60, o: 'v', img: blockImage});
     blocks.push({x: gameW-wallW-15-70, y: wallW+10, w: 70, h: 50, o: 'v', img: blockImage});
@@ -144,13 +144,13 @@
         hWidths = (shapeA.w / 2) + (shapeB.w / 2),
         hHeights = (shapeA.h / 2) + (shapeB.h / 2),
         colDir = null;
- 
-    // if the x and y vector are less than the half width or half height, 
+
+    // if the x and y vector are less than the half width or half height,
     // they we must be inside the object, causing a collision
     if (Math.abs(vX) < hWidths && Math.abs(vY) < hHeights) {         // figures out on which side we are colliding
       var oX = hWidths - Math.abs(vX),
           oY = hHeights - Math.abs(vY);
-      
+
       if (oX >= oY) {
         if (vY > 0) {
           colDir = "t";
@@ -178,16 +178,16 @@
 
     var i = 0;
     for(;i < walls.length;i++){
-      ctx.fillRect(walls[i].x, walls[i].y, walls[i].w, walls[i].h);    
+      ctx.fillRect(walls[i].x, walls[i].y, walls[i].w, walls[i].h);
     }
-    
+
     if(localStorage.getItem(topScoreKey) != null){
       ctx.fillStyle = '#FFF';
       ctx.font = "20px Helvetica";
       ctx.textAlign = "center";
 	    ctx.textBaseline = "middle";
       ctx.fillText("Top score: "+localStorage.getItem(topScoreKey)+" s", gameW/2, wallW/2);
-    } 
+    }
 
     if(blockReady && block2Ready){
       for(i = 0;i < blocks.length;i++){
@@ -199,13 +199,13 @@
               blocks[i].vY = -blocks[i].vY
             }else if(col == 'l' || col == 'r'){
               blocks[i].vX = -blocks[i].vX
-            }  
+            }
           }
 
           blocks[i].x += blocks[i].vX;
           blocks[i].y += blocks[i].vY;
         }
-        
+
 
         if(blocks[i].o == 'v'){
           ctx.drawImage(blocks[i].img, blocks[i].x, blocks[i].y, blocks[i].w, blocks[i].h);
@@ -214,12 +214,12 @@
           var x = blocks[i].x + (blocks[i].w / 2),
               y = blocks[i].y + (blocks[i].h / 2),
               angle = Math.PI/2;
-          
+
           ctx.translate(x, y);
           ctx.rotate(-angle);
           ctx.drawImage(blocks[i].img, -blocks[i].h / 2, -blocks[i].w / 2, blocks[i].h, blocks[i].w);
           ctx.rotate(angle);
-          ctx.translate(-x, -y);      
+          ctx.translate(-x, -y);
         }
       }
     }
@@ -245,7 +245,7 @@
       }
     }
   }
-  
+
   function drawScore(){
     var sW = 200, sH = 100,
     points = (new Date() - startTime)/1000;
@@ -266,5 +266,5 @@
 
   initGame();
   startGame();
-    
+
 })()

@@ -1,28 +1,66 @@
- body{
-  font-family: "Open Sans", "Helvetica Neue", "Helvetica", "Arial";
-  color: #555;
+html, body {
+  margin: 0;
+  padding: 0;
+  background: #faf8ef;
+  color: #776e65;
+  font-family: "Clear Sans", "Helvetica Neue", Arial, sans-serif;
+  font-size: 18px; }
+
+body {
+  margin: 80px 0; }
+
+.container {
+  width: 500px;
+  margin: 0 auto; }
+
+.heading:after {
+  content: "";
+  display: block;
+  clear: both; }
+
+h1.title {
+  font-size: 60px;
+  font-weight: bold;
+  margin: 0;
+  display: block;
+  float: left; }
+
+.above-game:after {
+  content: "";
+  display: block;
+  clear: both;
+}
+
+.game-intro {
+  float: left;
+  line-height: 42px;
+  margin-bottom: 0;
+}
+
+p {
+  margin-top: 0;
+  margin-bottom: 10px;
+  line-height: 1.65;
 }
 
 #background{
   height: 500px;
   width: 500px;
   background-image: url('images/back.jpg');
-  margin: 0 auto;
+  margin: 40 auto 0;
 }
 
-a{ 
-  text-decoration: none;
-  color: gray;
+.credits {
+  margin-top: 30px;
 }
 
-.author{
-  float: right;
+a {
+  color: #776e65;
+  font-weight: bold;
+  text-decoration: underline;
+  cursor: pointer;
 }
 
-.container{
-  width: 800px;
-  background-color: #EEE;
-  margin: 0 auto;
-  padding: 10px;
-  text-align: center;
+.sharing {
+  margin-top: 20px;
 }
