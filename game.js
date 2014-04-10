@@ -49,8 +49,16 @@
     };
     block2Image.src = "images/pipe2.png";
 
+    var fixCoord = function(ev){
+      if(!ev.hasOwnProperty('offsetX')) {
+        ev.offsetX = ev.layerX - ev.currentTarget.offsetLeft;
+        ev.offsetY = ev.layerY - ev.currentTarget.offsetTop;
+      }    
+    }
+
     //events
     canvas.addEventListener('mousedown', function(e){
+      fixCoord(e);
       if( isOver(e.offsetX, e.offsetY, player) ){
         player.offX = (e.offsetX - player.x);
         player.offY = (e.offsetY - player.y);
@@ -67,6 +75,7 @@
 
     canvas.addEventListener('mousemove', function(e){
       e.preventDefault();
+      fixCoord(e);
       if(drag){
         player.x = (e.offsetX - player.offX);
         player.y = (e.offsetY - player.offY);
@@ -80,6 +89,7 @@
     });
 
     canvas.addEventListener('click', function(e){
+      fixCoord(e);
       if( isOver(e.offsetX, e.offsetY, score) ){
         resetGame();
         startGame();
@@ -96,11 +106,11 @@
     moving = false;
 
     blocks = [];
-    blocks.push({x: wallW+15, y: wallW+10, w: 60, h: 60, o: 'v', img: blockImage});
-    blocks.push({x: gameW-wallW-15-70, y: wallW+10, w: 70, h: 50, o: 'v', img: blockImage});
+    blocks.push({x: wallW+21, y: wallW+10, w: 60, h: 60, o: 'v', img: blockImage});
+    blocks.push({x: gameW-wallW-22-70, y: wallW+10, w: 70, h: 50, o: 'v', img: blockImage});
 
-    blocks.push({x: wallW+10, y: gameH-wallW-10-85, w: 30, h: 85, o: 'v', img: block2Image});
-    blocks.push({x: gameW-wallW-10-120, y: gameH-wallW-10-30, w: 120, h: 30, o: 'h', img: block2Image});
+    blocks.push({x: wallW+10, y: gameH-wallW-17-85, w: 30, h: 85, o: 'v', img: block2Image});
+    blocks.push({x: gameW-wallW-10-120, y: gameH-wallW-21-30, w: 120, h: 30, o: 'h', img: block2Image});
   }
 
   function isOver(x, y, shape){
