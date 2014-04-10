@@ -1,14 +1,27 @@
 <html>
   <head>
     <title>Flappy 19s</title>
-    <link href="style.css" type="text/css" rel="stylesheet"/>
+    <link href="http://gabrielecirulli.github.io/2048/style/fonts/clear-sans.css" type="text/css" rel="stylesheet">
+    <link href="style.css" type="text/css" rel="stylesheet">
   </head>
   <body>
     <div class="container">
-      <a href="http://github.com/leo-souza" class="author">@leo-souza</a>
-      <h1>Flappy 19s</h1>
+      <div class="heading">
+        <h1 class="title">Flappy 19s</h1>
+      </div>
+      <div class="above-game">
+        <p class="game-intro">Kepp the bird alive for more than <strong>19 seconds!</strong></p>
+      </div>
+      <!--a href="http://github.com/leo-souza" class="author">@leo-souza</a-->
       <div id="background">
         <canvas id="game"></canvas>
+      </div>
+      <div class="credits">
+        Created by <a href=https://github.com/leo-souza>Leonardo Souza</a>.
+      </div>
+      <div class="sharing">
+        <a href="https://twitter.com/share" class="twitter-share-button" data-lang="en" data-url="http://git.io/0Rw_sQ" data-via="leoporks" data-text="Check out, try keep the bird alive for more than 19 seconds!" data-hashtags="flappy19">Tweet</a>
+        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="https://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
       </div>
     </div>
     <script src="game.js"></script>
