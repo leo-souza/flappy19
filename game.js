@@ -130,10 +130,12 @@
   function startMoving(){
     var i = 0;
     for(;i < blocks.length;i++){
-      var s = Math.floor(Math.random()*(5-3+1)+3),
-          d = Math.floor(Math.random()*(1-0+1)+0);
-      blocks[i].vX = s * (d == 0 ? 1 : -1);
-      blocks[i].vY = s * (d == 0 ? 1 : -1);
+      var minV = 3, maxV = 5,
+          vX = Math.floor(Math.random()*(maxV-minV+1)+minV),
+          vY = Math.floor(Math.random()*(maxV-minV+1)+minV),
+          d = Math.floor(Math.random() * 2);
+      blocks[i].vX = vX * (d == 0 ? 1 : -1);
+      blocks[i].vY = vY * (d == 0 ? 1 : -1);
     }
     moving = true;
     startTime = new Date();
