@@ -5,13 +5,13 @@ var util = {
     var i = 0;
     for(; i < array.length; i++){
       block.call(array[i], i);
-    }    
+    }
   },
   isOver: function(mouseEvent, shape){
     if(!mouseEvent.hasOwnProperty('offsetX')){
       mouseEvent.offsetX = mouseEvent.layerX - mouseEvent.currentTarget.offsetLeft;
       mouseEvent.offsetY = mouseEvent.layerY - mouseEvent.currentTarget.offsetTop;
-    }  
+    }
     if(!shape.hidden &&
        mouseEvent.offsetX >= shape.x &&
        mouseEvent.offsetY >= shape.y &&
@@ -32,7 +32,7 @@ var util = {
 
     // if the x and y vector are less than the half width or half height,
     // they we must be inside the object, causing a collision
-    if (Math.abs(vX) < hWidths && Math.abs(vY) < hHeights) {         
+    if (Math.abs(vX) < hWidths && Math.abs(vY) < hHeights) {
       var oX = hWidths - Math.abs(vX),
           oY = hHeights - Math.abs(vY);
       // figures out on which side we are colliding
@@ -66,7 +66,7 @@ var Game19s = function(config) {
   if(!config.player) config.player = {};
   if(!config.blocks) config.blocks = [];
 
-  var options = config, 
+  var options = config,
       canvas = document.getElementById(options.canvas.id || 'canvas'),
       ctx = canvas.getContext('2d'),
       walls = [],
@@ -85,30 +85,26 @@ var Game19s = function(config) {
       gameH = options.canvas.height || 500,
       version = '1.0';
 
+  var game = this;
+
   //private functions
   var reset = function(){
     player.x = (gameW/2)-(player.w/2);
     player.y = (gameH/2)-(player.h/2);
     player.dragging = false;
     scorePopup.hidden = true;
- 
+
     util.each(blocks, function(){
       this.x = this.initial.x;
-      this.y = this.initial.y;        
+      this.y = this.initial.y;
     });
     gameState = states.initial;
+    setBlocksSpeed();
     render();
   },
 
   start = function(){
-    util.each(blocks, function(){
-      var minV = 3, maxV = 5,
-          vX = Math.floor(Math.random()*(maxV-minV+1)+minV),
-          vY = Math.floor(Math.random()*(maxV-minV+1)+minV),
-          d = Math.floor(Math.random() * 2);
-      this.vX = vX * (d == 0 ? 1 : -1);
-      this.vY = vY * (d == 0 ? 1 : -1);
-    });
+    game.beforeStart();
     startTime = +new Date();
     gameState = states.playing;
     gameLoop = setInterval(render, 10);
@@ -128,9 +124,27 @@ var Game19s = function(config) {
     gameState = states.ended;
   },
 
+  setBlocksSpeed = function(speed){
+    util.each(blocks, function(){
+      var minV = 3, maxV = 5,
+          vX = speed ? speed : Math.floor(Math.random()*(maxV-minV+1)+minV),
+          vY = speed ? speed : Math.floor(Math.random()*(maxV-minV+1)+minV),
+          dX = Math.floor(Math.random() * 2),
+          dY = Math.floor(Math.random() * 2);
+
+      /// If game is running do not change direction
+      if (gameState == states.playing) {
+        dX = this.vX > 0 ? 0 : 1;
+        dY = this.vY > 0 ? 0 : 1;
+      }
+      this.vX = vX * (dX == 0 ? 1 : -1);
+      this.vY = vY * (dY == 0 ? 1 : -1);
+    });
+  },
+
   initPlayer = function(){
     player = {w: options.player.width, h: options.player.height};
-    player.img = new Image();    
+    player.img = new Image();
     player.img.onload = function () {
       loadQueue['player_img'] = true;
     };
@@ -189,14 +203,14 @@ var Game19s = function(config) {
   },
 
   events = {
-  
+
     mousedown: function(ev){
       player.dragging = false;
       if( gameState == states.initial && util.isOver(ev, player) ){
         player.offX = (ev.offsetX - player.x);
         player.offY = (ev.offsetY - player.y);
         player.dragging = true;
-        start();  
+        start();
       }
     },
 
@@ -231,7 +245,7 @@ var Game19s = function(config) {
     util.each(walls, function(){
       ctx.fillRect(this.x, this.y, this.w, this.h);
     });
-  
+
     var database = JSON.parse(localStorage.getItem(version));
     ctx.fillStyle = '#FFF';
     ctx.font = "20px Helvetica";
@@ -239,8 +253,8 @@ var Game19s = function(config) {
     ctx.textAlign = "left";
     ctx.fillText(database.deaths, wallW, wallW/2);
     ctx.textAlign = "right";
-    ctx.fillText("Top score: "+database.top_score+" s", gameW - wallW, wallW/2); 
-    
+    ctx.fillText("Top score: "+database.top_score+" s", gameW - wallW, wallW/2);
+
     util.each(blocks, function(){
       var block = this;
       if(gameState == states.playing){
@@ -252,7 +266,7 @@ var Game19s = function(config) {
             block.vX = -block.vX
           }
         });
-        
+
         block.x += block.vX;
         block.y += block.vY;
       }
@@ -285,10 +299,10 @@ var Game19s = function(config) {
         end = true;
       }
     });
-  
+
     ctx.drawImage(player.img, player.x, player.y, player.w, player.h);
     if(end) stop();
-    
+
     if(!scorePopup.hidden){
       ctx.fillStyle = "#000";
       ctx.fillRect(scorePopup.x, scorePopup.y, scorePopup.w, scorePopup.h);
@@ -304,29 +318,52 @@ var Game19s = function(config) {
   canvas.addEventListener('mousedown', events.mousedown);
   canvas.addEventListener('mouseup', events.mouseup);
   canvas.addEventListener('mousemove', events.mousemove);
-  canvas.addEventListener('click', events.click); 
+  canvas.addEventListener('click', events.click);
   initPlayer();
-  initStage(); 
-  initBlocks(); 
+  initStage();
+  initBlocks();
 
   //public functions
   this.init = function(){
     if(isLoading()){
-      setTimeout(arguments.callee, 200);    
+      setTimeout(arguments.callee, 200);
     }else{
       reset();
     }
   };
 
+  this.getGameState = function(){
+    return gameState;
+  }
+
+  this.flappyAlert = function(text){
+    var alert = document.getElementById('flappy-alert');
+    if(!alert){
+      alert = document.createElement("div");
+      alert.id = 'flappy-alert';
+      document.body.appendChild(alert);
+    }
+
+    alert.innerText = text;
+    alert.classList.add('visible');
+    setTimeout(function(){
+      alert.classList.remove('visible');
+    }, 3000);
+  };
+
+  this.beforeStart = function(){ };
+
+  ////// Cheat codes
   if (window.addEventListener){
-    var index = 0;
+    var konamiIndex = 0;
     var konami = [38,38,40,40,37,39,37,39,66,65];//,13];
+    var bonusIndex = 0;
+    var bonus = ['g', 'i', 'm', 'm', 'e', 'b', 'o', 'n', 'u', 's'];
 
     window.addEventListener("keydown", function(e){
-
-      if (e.keyCode === konami[index]){
-        index++; //valid key at the valid point
-        if (index == konami.length){
+      if (e.keyCode === konami[konamiIndex]){
+        konamiIndex++; //valid key at the valid point
+        if (konamiIndex == konami.length){
 
           var block = new Image();
           block.onload = function(){
@@ -339,24 +376,50 @@ var Game19s = function(config) {
             reset();
           };
           block.src = 'images/2048.png';
-          
+
         }else{
           //
         }
       }else{
         // incorrect code restart
-        index = 0; 
+        konamiIndex = 0;
+      }
+
+      if (e.key === bonus[bonusIndex]){
+        bonusIndex++; //valid key at the valid point
+        if (bonusIndex == bonus.length){
+          if (game.getGameState() == states.initial) {
+
+            game.flappyAlert('Bonus +5s');
+            game.beforeStart = function(){
+              setBlocksSpeed(2);
+              setTimeout(function(){
+                if (game.getGameState() == states.playing) {
+                  game.flappyAlert('Bonus ended');
+                  setBlocksSpeed();
+                  game.beforeStart = function(){ };
+                }
+              }, 5000);
+            }
+
+          }
+        }else{
+          //
+        }
+      }else{
+        // incorrect code restart
+        bonusIndex = 0;
       }
     });
   }
 };
 
-  
+
 (function(){
   ////
   var flappy19s = new Game19s({
     canvas: {
-      id: 'game'    
+      id: 'game'
     },
     player: {
       img: 'images/bird.png',
@@ -367,7 +430,7 @@ var Game19s = function(config) {
       {width: 60, height: 60, orientation: 'v', img: 'images/pipe1.png'},
       {width: 70, height: 50, orientation: 'v', img: 'images/pipe1.png'},
       {width: 30, height: 85, orientation: 'v', img: 'images/pipe2.png'},
-      {width: 120, height: 30, orientation: 'h', img: 'images/pipe2.png'}    
+      {width: 120, height: 30, orientation: 'h', img: 'images/pipe2.png'}
     ]
   });
 

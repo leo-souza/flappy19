@@ -3,7 +3,7 @@ html, body {
   padding: 0;
   background: #faf8ef;
   color: #776e65;
-  font-family: "Clear Sans", "Helvetica Neue", Arial, sans-serif;
+  font-family: 'Lato', 'Helvetica Neue', Arial, sans-serif;
   font-size: 18px; }
 
 body {
@@ -74,4 +74,22 @@ a {
 
 .sharing {
   margin-top: 20px;
+}
+
+#flappy-alert {
+  position: fixed;
+  top: 15px;
+  right: 15px;
+  padding: 10px;
+  max-width: 200px;
+  background-color: rgba(0, 0, 0, .35);
+  color: #fff;
+  border-radius: 5px;
+  opacity: 0;
+  transition: opacity .4s;
+  pointer-events: none;
+}
+
+#flappy-alert.visible {
+  opacity: 1;
 }
